@@ -1,0 +1,53 @@
+deployment:
+    name: linux-monitor 
+    namespace: default
+    
+image:
+  name: schnitz81/linux-monitor
+  tag: latest
+  pullPolicy: Always
+
+container:
+  backupMountpath: /backups
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 125m
+    memory: 512Mi
+
+pvc:
+  enabled: "true"
+  name: linux-monitor-persistent 
+  accessModes:
+    - ReadWriteMany
+  size: 1Gi
+  storageClassName: ""
+
+configfiles:
+  config: |-
+    client_port = 12345
+    db_path = "/run"
+    persistence_path = "/backups"
+    html_path = "/run/linux-monitor"
+    scancycletime = 10
+    clientfile = "clients.conf"
+  clients: |-
+    # List of clients to monitor
+    # {name} {IP address}
+    hostname X.X.X.X	# <--------------- enter your own clients
+
+webserver:
+  containerport: 80
+  exposeport: 80
+  contentpath: "/run/linux-monitor"  # should be same as html_path
+
+service:
+  type: LoadBalancer 
+  loadBalancerIP: ""
+  clusterIP: ""
+  nodePort: ""
+  externalTrafficPolicy: Cluster
+  sessionAffinity: None

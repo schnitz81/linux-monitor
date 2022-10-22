@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment.name }}
+  labels:
+      app.kubernetes.io/name: {{ .Values.deployment.name }}
+spec:
+  replicas: 1
+  selector:
+      matchLabels:
+        app: {{ .Values.deployment.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.deployment.name }}
+    spec:
+      volumes:
+      - name: ramdisk
+        hostPath:
+          path: /run
+          type: Directory
+      - name: {{ .Values.pvc.name }}-pvc
+        persistentVolumeClaim:
+          claimName: {{ .Values.pvc.name }}-pvc
+      - name: config
+        configMap:
+          name: configfiles
+          items:
+           - key: config.py
+             path: config.py
+      - name: clients
+        configMap:
+          name: configfiles
+          items:
+           - key: clients.conf
+             path: clients.conf
+      - name: webservercontent
+        hostPath:
+          path: {{ .Values.webserver.contentpath }}
+          type: Directory
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+          - name: ramdisk
+            mountPath: /run
+          - name: {{ .Values.pvc.name }}-pvc
+            mountPath: {{ .Values.container.backupMountpath }}
+          - name: config
+            mountPath: /linux-monitor/config.py
+            subPath: config.py
+          - name: clients
+            mountPath: /linux-monitor/clients.conf
+            subPath: clients.conf
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        - name: nginx 
+          image: nginx:stable-alpine
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.webserver.containerport }} 
+          volumeMounts:
+          - name: webservercontent 
+            mountPath: /usr/share/nginx/html
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+
+
