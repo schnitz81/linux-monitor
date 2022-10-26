@@ -20,6 +20,8 @@ intervals = {'hour': {'timestring': 'hours', 'value': 1},
 
 def plot_single_graph(conn, client, table, interval):
 
+    print(f"Plotting {client} {table} {interval} graph.")
+
     column = database.get_value_column_name(conn, table, 2)
     data = database.read_data(conn, table)
     now = datetime.datetime.now()
@@ -50,8 +52,6 @@ def plot_single_graph(conn, client, table, interval):
         plt.figure(num=None, figsize=(13, 10), dpi=100, facecolor='w')
 
         plt.gcf().autofmt_xdate()
-
-
 
         plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M'))
 
@@ -153,6 +153,8 @@ def plot_single_graph(conn, client, table, interval):
 
 
 def plot_multi_graph(conn, client, table, interval):
+
+    print(f"Plotting {client} {table} {interval} graphs.")
 
     for deviceNbr in range(2, 12, 2):  # every other col in DB (5 double values)
 
