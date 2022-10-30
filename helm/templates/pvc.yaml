@@ -1,17 +1,15 @@
-{{- if .Values.pvc.enabled }}
-{{- if eq .Values.pvc.enabled "true" }}
+{{- if eq .Values.persistence.pvcOrHostPath "pvc" }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Values.pvc.name }}-pvc
+  name: {{ .Values.persistence.pvc.name }}-pvc
 spec:
   accessModes:
-{{ toYaml .Values.pvc.accessModes | indent 4 }}
-  {{- if and (.Values.pvc.storageClassName) (not (empty .Values.pvc.storageClassName)) }}
-  storageClassName: "{{ .Values.pvc.storageClassName }}"
+{{ toYaml .Values.persistence.pvc.accessModes | indent 4 }}
+  {{- if and (.Values.persistence.pvc.storageClassName) (not (empty .Values.persistence.pvc.storageClassName)) }}
+  storageClassName: "{{ .Values.persistence.pvc.storageClassName }}"
   {{- end  }}
   resources:
     requests:
-      storage: "{{ .Values.pvc.size }}"
-{{- end }}
+      storage: "{{ .Values.persistence.pvc.size }}"
 {{- end }}

@@ -10,8 +10,8 @@ spec:
   {{- if .Values.service.sessionAffinity }}
   sessionAffinity: {{ .Values.service.sessionAffinity }}
   {{- end }}
-  {{- if or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort") }}
-  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | quote }}
+  {{- if (eq .Values.service.type "NodePort") }}
+  externalTrafficPolicy: Cluster 
   {{- end }}
   {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}

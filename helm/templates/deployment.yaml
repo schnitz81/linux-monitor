@@ -19,9 +19,16 @@ spec:
         hostPath:
           path: /run
           type: Directory
-      - name: {{ .Values.pvc.name }}-pvc
+      {{- if eq .Values.persistence.pvcOrHostPath "pvc" }}
+      - name: {{ .Values.persistence.pvc.name }}-pvc
         persistentVolumeClaim:
-          claimName: {{ .Values.pvc.name }}-pvc
+          claimName: {{ .Values.persistence.pvc.name }}-pvc
+      {{- end }} 
+      {{- if eq .Values.persistence.pvcOrHostPath "hostPath" }}
+      - name: {{ .Values.persistence.hostPath.name }}
+        hostPath:
+          path: {{ .Values.persistence.hostPath.path }}
+      {{- end }} 
       - name: config
         configMap:
           name: configfiles
@@ -37,16 +44,21 @@ spec:
       - name: webservercontent
         hostPath:
           path: {{ .Values.webserver.contentpath }}
-          type: Directory
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ .Values.deployment.name }}
           image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
           - name: ramdisk
             mountPath: /run
-          - name: {{ .Values.pvc.name }}-pvc
+          {{- if eq .Values.persistence.pvcOrHostPath "pvc" }}
+          - name: {{ .Values.persistence.pvc.name }}-pvc
             mountPath: {{ .Values.container.backupMountpath }}
+          {{- end }}  
+          {{- if eq .Values.persistence.pvcOrHostPath "hostPath" }}
+          - name: {{ .Values.persistence.hostPath.name }}
+            mountPath: {{ .Values.persistence.hostPath.containerPath }} 
+          {{- end }} 
           - name: config
             mountPath: /linux-monitor/config.py
             subPath: config.py

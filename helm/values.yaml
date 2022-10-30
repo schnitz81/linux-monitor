@@ -1,6 +1,5 @@
 deployment:
     name: linux-monitor 
-    namespace: default
     
 image:
   name: schnitz81/linux-monitor
@@ -18,13 +17,22 @@ resources:
     cpu: 125m
     memory: 512Mi
 
-pvc:
-  enabled: "true"
-  name: linux-monitor-persistent 
-  accessModes:
-    - ReadWriteMany
-  size: 1Gi
-  storageClassName: ""
+persistence:
+  # choose "pvc" or "hostPath" for persistent db storage.
+  # Anything else to disable DB persistence and graph history will restart every time the pod is terminated.
+  pvcOrHostPath: pvc 
+
+  pvc:  
+    name: linux-monitor-persistent 
+    accessModes:
+      - ReadWriteOnce
+    size: 1Gi
+    storageClassName: ""  # leave empty to use default StorageClass
+  
+  hostPath: 
+    name: linux-monitor-persistent
+    path: /backups  # persistence path on the host 
+    containerPath: /backups  # same as persistence_path in the app config 
 
 configfiles:
   config: |-
@@ -49,5 +57,4 @@ service:
   loadBalancerIP: ""
   clusterIP: ""
   nodePort: ""
-  externalTrafficPolicy: Cluster
   sessionAffinity: None
