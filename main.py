@@ -252,6 +252,6 @@ if __name__ == '__main__':
         print(crashmsg)
         crashtime = str(time.time())
         with open("/tmp/pythoncrash-" + crashtime + ".log", "w") as crashlog:
-            for i in crashtime:
-                i = str(i)
+            for i in crashmsg:
+                i = str(i) + '\n'
                 crashlog.write(i)
