@@ -22,7 +22,7 @@ def create_connection(client):
     # create db connection and create new db if both db and backup are missing
     conn = None
     try:
-        conn = sqlite3.connect(f'{config.db_path}/{client}.db')
+        conn = sqlite3.connect(f'{config.db_path}/{client}.db', timeout=12)
         return conn
     except Exception as e:
         print(e)
