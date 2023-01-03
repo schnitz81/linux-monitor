@@ -22,11 +22,11 @@ def create_connection(client):
     # create db connection and create new db if both db and backup are missing
     conn = None
     try:
-        conn = sqlite3.connect(f'{config.db_path}/{client}.db', timeout=12)
+        conn = sqlite3.connect(f'{config.db_path}/{client}.db', isolation_level=None, timeout=0.01)
         return conn
     except Exception as e:
-        print(e)
         conn.close()
+        print(e)
     return conn
 
 
@@ -203,7 +203,11 @@ def get_minimum_value(conn, column, table, interval):
     c = conn.cursor()
     with conn:
         c.execute(f"SELECT min({column}) FROM {table} WHERE ts >= datetime('now', '{timespan}', 'localtime')")
-        result = int(round(float(format(c.fetchone()[0]))))
+        try:
+            result = int(round(float(format(c.fetchone()[0]))))
+        except ValueError as val_e:
+            print(val_e)
+            return None
         return result
 
 def get_maximum_value(conn, column, table, interval):
@@ -211,7 +215,11 @@ def get_maximum_value(conn, column, table, interval):
     c = conn.cursor()
     with conn:
         c.execute(f"SELECT max({column}) FROM {table} WHERE ts >= datetime('now', '{timespan}', 'localtime')")
-        result = int(round(float(format(c.fetchone()[0]))))
+        try:
+            result = int(round(float(format(c.fetchone()[0]))))
+        except ValueError as val_e:
+            print(val_e)
+            return None
         return result
 
 def get_average_value(conn, column, table, interval):
@@ -219,14 +227,22 @@ def get_average_value(conn, column, table, interval):
     c = conn.cursor()
     with conn:
         c.execute(f"SELECT avg({column}) FROM {table} WHERE ts >= datetime('now', '{timespan}', 'localtime')")
-        result = int(round(float(format(c.fetchone()[0]))))
+        try:
+            result = int(round(float(format(c.fetchone()[0]))))
+        except ValueError as val_e:
+            print(val_e)
+            return None
         return result
 
 def get_current_value(conn, column, table):
     c = conn.cursor()
     with conn:
         c.execute(f"SELECT {column} FROM {table} WHERE ts= (SELECT max (ts) FROM {table})")
-        result = int(round(float(format(c.fetchone()[0]))))
+        try:
+            result = int(round(float(format(c.fetchone()[0]))))
+        except ValueError as val_e:
+            print(val_e)
+            return None
         return result
 
 def get_minimum_value_float(conn, column, table, interval):
@@ -234,7 +250,11 @@ def get_minimum_value_float(conn, column, table, interval):
     c = conn.cursor()
     with conn:
         c.execute(f"SELECT min({column}) FROM {table} WHERE ts >= datetime('now', '{timespan}', 'localtime')")
-        result = float(format(c.fetchone()[0]))
+        try:
+            result = float(format(c.fetchone()[0]))
+        except ValueError as val_e:
+            print(val_e)
+            return None
         return result
 
 def get_maximum_value_float(conn, column, table, interval):
@@ -242,7 +262,11 @@ def get_maximum_value_float(conn, column, table, interval):
     c = conn.cursor()
     with conn:
         c.execute(f"SELECT max({column}) FROM {table} WHERE ts >= datetime('now', '{timespan}', 'localtime')")
-        result = float(format(c.fetchone()[0]))
+        try:
+            result = float(format(c.fetchone()[0]))
+        except ValueError as val_e:
+            print(val_e)
+            return None
         return result
 
 def get_average_value_float(conn, column, table, interval):
@@ -250,14 +274,22 @@ def get_average_value_float(conn, column, table, interval):
     c = conn.cursor()
     with conn:
         c.execute(f"SELECT avg({column}) FROM {table} WHERE ts >= datetime('now', '{timespan}', 'localtime')")
-        result = float(format(c.fetchone()[0]))
+        try:
+            result = float(format(c.fetchone()[0]))
+        except ValueError as val_e:
+            print(val_e)
+            return None
         return result
 
 def get_current_value_float(conn, column, table):
     c = conn.cursor()
     with conn:
         c.execute(f"SELECT {column} FROM {table} WHERE ts= (SELECT max (ts) FROM {table})")
-        result = float(format(c.fetchone()[0]))
+        try:
+            result = float(format(c.fetchone()[0]))
+        except ValueError as val_e:
+            print(val_e)
+            return None
         return result
 
 def delete_old_values(conn, table):

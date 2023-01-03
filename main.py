@@ -107,47 +107,33 @@ def shorttermgraph():
 
         for client in clients.keys():
 
-            # connect to db
-            print(f"Connecting to {client} db.")
-            conn = database.create_connection(client)
-
-            print("Plotting hour and day graphs.")
+            print(f"Starting {client} hour and day plotting.")
 
             # plot cpu
-            if database.db_records_in_timespan_exist(conn, 'cpu', 'hour'):
-                plotting.plot_single_graph(conn, client, 'cpu', 'hour')
-                plotting.plot_single_graph(conn, client, 'cpu', 'day')
+            plotting.plot_single_graph(client, 'cpu', 'hour')
+            plotting.plot_single_graph(client, 'cpu', 'day')
 
             # plot ram
-            if database.db_records_in_timespan_exist(conn, 'ram', 'hour'):
-                plotting.plot_single_graph(conn, client, 'ram', 'hour')
-                plotting.plot_single_graph(conn, client, 'ram', 'day')
+            plotting.plot_single_graph(client, 'ram', 'hour')
+            plotting.plot_single_graph(client, 'ram', 'day')
 
             # plot swap
-            if database.db_records_in_timespan_exist(conn, 'swap', 'hour'):
-                plotting.plot_single_graph(conn, client, 'swap', 'hour')
-                plotting.plot_single_graph(conn, client, 'swap', 'day')
+            plotting.plot_single_graph(client, 'swap', 'hour')
+            plotting.plot_single_graph(client, 'swap', 'day')
 
             # plot uptime
-            if database.db_records_in_timespan_exist(conn, 'uptime', 'hour'):
-                plotting.plot_single_graph(conn, client, 'uptime', 'hour')
-                plotting.plot_single_graph(conn, client, 'uptime', 'day')
+            plotting.plot_single_graph(client, 'uptime', 'hour')
+            plotting.plot_single_graph(client, 'uptime', 'day')
 
             # plot disk
-            if database.db_records_in_timespan_exist(conn, 'disk', 'hour'):
-                plotting.plot_multi_graph(conn, client, 'disk', 'hour')
-                plotting.plot_multi_graph(conn, client, 'disk', 'day')
+            plotting.plot_multi_graph(client, 'disk', 'hour')
+            plotting.plot_multi_graph(client, 'disk', 'day')
 
             # plot network
-            if database.db_records_in_timespan_exist(conn, 'network', 'hour'):
-                plotting.plot_multi_graph(conn, client, 'network', 'hour')
-                plotting.plot_multi_graph(conn, client, 'network', 'day')
+            plotting.plot_multi_graph(client, 'network', 'hour')
+            plotting.plot_multi_graph(client, 'network', 'day')
 
-            print("Hour and day graphs plotted.")
-
-            # close database connection
-            print(f"Closing {client} db connection.")
-            database.close_connection(conn)
+            print(f"{client} hour and day plotting finished.")
 
         shorttermtimer_stop = time.perf_counter()
         print(f"\nPlotted short term graphs in {shorttermtimer_stop - shorttermtimer_start:0.2f} seconds\n")
@@ -173,66 +159,64 @@ def longtermgraph():
 
         for client in clients.keys():
 
-            # connect to db
-            print(f"Connecting to {client} db.")
-            conn = database.create_connection(client)
-
             # plot cpu
-            if database.db_records_in_timespan_exist(conn, 'cpu', 'week'):
-                print(f'Plotting longterm graphs for {client} cpu.')
-                plotting.plot_single_graph(conn, client, 'cpu', 'week')
-                plotting.plot_single_graph(conn, client, 'cpu', 'month')
-                plotting.plot_single_graph(conn, client, 'cpu', 'year')
-                print(f'Deleting old {client} cpu records.')
-                database.delete_old_values(conn, 'cpu')
+            print(f'Plotting longterm graphs for {client} cpu.')
+            plotting.plot_single_graph(client, 'cpu', 'week')
+            plotting.plot_single_graph(client, 'cpu', 'month')
+            plotting.plot_single_graph(client, 'cpu', 'year')
+            print(f'Deleting old {client} cpu records.')
+            conn = database.create_connection(client)
+            database.delete_old_values(conn, 'cpu')
+            database.close_connection(conn)
 
             # plot ram
-            if database.db_records_in_timespan_exist(conn, 'ram', 'week'):
-                print(f'Plotting longterm graphs for {client} ram.')
-                plotting.plot_single_graph(conn, client, 'ram', 'week')
-                plotting.plot_single_graph(conn, client, 'ram', 'month')
-                plotting.plot_single_graph(conn, client, 'ram', 'year')
-                print(f'Deleting old {client} ram records.')
-                database.delete_old_values(conn, 'ram')
+            print(f'Plotting longterm graphs for {client} ram.')
+            plotting.plot_single_graph(client, 'ram', 'week')
+            plotting.plot_single_graph(client, 'ram', 'month')
+            plotting.plot_single_graph(client, 'ram', 'year')
+            print(f'Deleting old {client} ram records.')
+            conn = database.create_connection(client)
+            database.delete_old_values(conn, 'ram')
+            database.close_connection(conn)
 
             # plot swap
-            if database.db_records_in_timespan_exist(conn, 'swap', 'week'):
-                print(f'Plotting longterm graphs for {client} swap.')
-                plotting.plot_single_graph(conn, client, 'swap', 'week')
-                plotting.plot_single_graph(conn, client, 'swap', 'month')
-                plotting.plot_single_graph(conn, client, 'swap', 'year')
-                print(f'Deleting old {client} swap records.')
-                database.delete_old_values(conn, 'swap')
+            print(f'Plotting longterm graphs for {client} swap.')
+            plotting.plot_single_graph(client, 'swap', 'week')
+            plotting.plot_single_graph(client, 'swap', 'month')
+            plotting.plot_single_graph(client, 'swap', 'year')
+            print(f'Deleting old {client} swap records.')
+            conn = database.create_connection(client)
+            database.delete_old_values(conn, 'swap')
+            database.close_connection(conn)
 
             # plot uptime
-            if database.db_records_in_timespan_exist(conn, 'uptime', 'week'):
-                print(f'Plotting longterm graphs for {client} uptime.')
-                plotting.plot_single_graph(conn, client, 'uptime', 'week')
-                plotting.plot_single_graph(conn, client, 'uptime', 'month')
-                plotting.plot_single_graph(conn, client, 'uptime', 'year')
-                print(f'Deleting old {client} uptime records.')
-                database.delete_old_values(conn, 'uptime')
+            print(f'Plotting longterm graphs for {client} uptime.')
+            plotting.plot_single_graph(client, 'uptime', 'week')
+            plotting.plot_single_graph(client, 'uptime', 'month')
+            plotting.plot_single_graph(client, 'uptime', 'year')
+            print(f'Deleting old {client} uptime records.')
+            conn = database.create_connection(client)
+            database.delete_old_values(conn, 'uptime')
+            database.close_connection(conn)
 
             # plot disk
-            if database.db_records_in_timespan_exist(conn, 'disk', 'week'):
-                print(f'Plotting longterm graphs for {client} disk.')
-                plotting.plot_multi_graph(conn, client, 'disk', 'week')
-                plotting.plot_multi_graph(conn, client, 'disk', 'month')
-                plotting.plot_multi_graph(conn, client, 'disk', 'year')
-                print(f'Deleting old {client} disk records.')
-                database.delete_old_values(conn, 'disk')
+            print(f'Plotting longterm graphs for {client} disk.')
+            plotting.plot_multi_graph(client, 'disk', 'week')
+            plotting.plot_multi_graph(client, 'disk', 'month')
+            plotting.plot_multi_graph(client, 'disk', 'year')
+            print(f'Deleting old {client} disk records.')
+            conn = database.create_connection(client)
+            database.delete_old_values(conn, 'disk')
+            database.close_connection(conn)
 
             # plot network
-            if database.db_records_in_timespan_exist(conn, 'network', 'week'):
-                print(f'Plotting longterm graphs for {client} network.')
-                plotting.plot_multi_graph(conn, client, 'network', 'week')
-                plotting.plot_multi_graph(conn, client, 'network', 'month')
-                plotting.plot_multi_graph(conn, client, 'network', 'year')
-                print(f'Deleting old {client} network records.')
-                database.delete_old_values(conn, 'network')
-
-            # close database connection
-            print(f"Closing {client} db connection.")
+            print(f'Plotting longterm graphs for {client} network.')
+            plotting.plot_multi_graph(client, 'network', 'week')
+            plotting.plot_multi_graph(client, 'network', 'month')
+            plotting.plot_multi_graph(client, 'network', 'year')
+            print(f'Deleting old {client} network records.')
+            conn = database.create_connection(client)
+            database.delete_old_values(conn, 'network')
             database.close_connection(conn)
 
             # backup db
@@ -241,7 +225,7 @@ def longtermgraph():
 
         longtermgraphtimer_stop = time.perf_counter()
         print(f"\nPlotted short term graphs in {longtermgraphtimer_stop - longtermgraphtimer_start:0.2f} seconds\n")
-        print("---==== Long-term loop finished. ====---\n")
+        print("---==== Long-term procedure finished. ====---\n")
 
 
 if __name__ == '__main__':
@@ -253,5 +237,5 @@ if __name__ == '__main__':
         crashtime = str(time.time())
         with open("/tmp/pythoncrash-" + crashtime + ".log", "w") as crashlog:
             for i in crashmsg:
-                i = str(i) + '\n'
+                i = str(i)
                 crashlog.write(i)
