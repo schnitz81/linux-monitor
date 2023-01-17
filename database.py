@@ -23,6 +23,10 @@ def create_connection(client):
     conn = None
     try:
         conn = sqlite3.connect(f'{config.db_path}/{client}.db', timeout=12)
+        c = conn.cursor()
+        c.execute("PRAGMA read_uncommitted = true")
+        c.execute("PRAGMA synchronous = OFF")
+        c.execute("PRAGMA journal_mode = OFF")
         return conn
     except Exception as e:
         print(e)
@@ -45,6 +49,8 @@ def create_tables(conn):
         # create device name tables
         c.execute(sql.disk_path_table)
         c.execute(sql.network_name_table)
+
+        conn.commit()
     except Exception as creation_e:
         print(creation_e)
 
@@ -107,6 +113,9 @@ def store_values(conn, client, clients_data_parsed):
                 device5_tx_bytes))
         if 'uptime' in clients_data_parsed[client]:
             c.execute(sql.uptime_value.format(uptime))
+
+        conn.commit()
+
     except Exception as store_e:
         print(f'DB storage error: {store_e}')
 
@@ -137,6 +146,8 @@ def store_device_names(conn, client, clients_data_parsed):
         if 'network' in clients_data_parsed[client]:
             c.execute(sql.network_name_value.format(device1, device2, device3, device4, device5))
 
+        conn.commit()
+
     except Exception as store_e:
         print(f'DB storage error: {store_e}')
 
@@ -162,7 +173,7 @@ def get_value_column_name(conn, table, columnNbr):
 def nbr_of_cols(conn, table):
     c = conn.cursor()
     with conn:
-        c.execute(f"pragma table_info({table})")
+        c.execute(f"PRAGMA table_info({table})")
         tableinfo = c.fetchall()
         nbrOfCols = tableinfo[-1][0]
         return nbrOfCols
@@ -184,7 +195,7 @@ def db_records_in_timespan_exist(conn, table, interval):
 def get_device_label(conn, table, deviceNbr):  # value table
     c = conn.cursor()
     with conn:
-        c.execute(f"pragma table_info({table})")
+        c.execute(f"PRAGMA table_info({table})")
         tableinfo = c.fetchall()
         colname = tableinfo[round(deviceNbr/2)-1][1]
         c.execute(f"select MAX({colname}) from {table}")
@@ -193,7 +204,7 @@ def get_device_label(conn, table, deviceNbr):  # value table
 def get_device_enumeration(conn, table, deviceNbr):  # path/nw_device table
     c = conn.cursor()
     with conn:
-        c.execute(f"pragma table_info({table})")
+        c.execute(f"PRAGMA table_info({table})")
         tableinfo = c.fetchall()
         colname = tableinfo[deviceNbr][1]
         return colname.split("_", 1)[0]
@@ -264,9 +275,9 @@ def delete_old_values(conn, table):
     try:
         c = conn.cursor()
         c.execute(f"DELETE FROM {table} WHERE ts < DATE('now','-1 year')")
+        conn.commit()
     except Exception as deleteold_e:
         print(deleteold_e)
 
 def close_connection(conn):
-    conn.commit()
     conn.close()

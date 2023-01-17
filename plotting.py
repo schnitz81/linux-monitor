@@ -102,8 +102,8 @@ def plot_single_graph(conn, client, table, interval):
             xy=(0.85, 1.15),
             xytext=(0, 0),
             va='top',
-            xycoords = 'axes fraction',
-            textcoords = 'offset points',
+            xycoords='axes fraction',
+            textcoords='offset points',
             size=8.0, family='monospace',
             color='w'
         )
@@ -284,8 +284,8 @@ def plot_multi_graph(conn, client, table, interval):
                     xy=(0.85, 1.15),
                     xytext=(0, 0),
                     va='top',
-                    xycoords = 'axes fraction',
-                    textcoords = 'offset points',
+                    xycoords='axes fraction',
+                    textcoords='offset points',
                     size=8.0, family='monospace',
                     color='w'
                 )
@@ -306,10 +306,9 @@ def plot_multi_graph(conn, client, table, interval):
                 color='w'
             )
 
-
             # get y axis max value
             if table != 'network':
-                maxvalue = row[deviceNbr-1]
+                maxvalue = data[-1][deviceNbr-1]  # get max value for the current device from the last line in table
             else:
                 rxmaxvalue = 0
                 txmaxvalue = 0
@@ -328,20 +327,18 @@ def plot_multi_graph(conn, client, table, interval):
                 else:
                     maxvalue = txmaxvalue
 
-
             # annotate y axis max size
             totallabel = ''
             with bitmath.format(fmt_str="{value:.3f} {unit}"):
                 if table == 'disk':
                     totallabel = 'Total size: ' + str(bitmath.kB(maxvalue).best_prefix())
-                    #totallabel = 'Total size: ' + '{:.2f} GiB'.format(float(KiB(current_value).best_prefix()))
                 plt.annotate(
                     totallabel,
                     xy=(-0.05, 1.1),
                     xytext=(0, 0),
                     va='top',
-                    xycoords = 'axes fraction',
-                    textcoords = 'offset points',
+                    xycoords='axes fraction',
+                    textcoords='offset points',
                     size=8.0, family='Sans',
                     color='w'
                 )
