@@ -48,7 +48,7 @@ CLIENT_HEAD = """
 """
 
 CLIENT_BUTTON = """
-    <button onclick="hideshow_{}()"><img style="max-width:80px; max-height:80px;" src="{}.png"><h2>{}</h2></button>
+    <button id="{}_button" onclick="hideshow_{}()"><img style="max-width:80px; max-height:80px;" src="{}.png"><h2>{}</h2></button>
 """
 
 DATA_HEAD = """
@@ -66,10 +66,14 @@ DATA_TAIL = """
 			<script>
                 function hideshow_{}() {{
                   var alltoggledivs = document.querySelectorAll("[id^='togglediv']");
+                  var alldevicebuttons = document.querySelectorAll("[id$='_button']");
 				  for (let z of alltoggledivs) {{ z.style.display = "none"; }}
                   var x = document.getElementById("togglediv_{}");
+                  var b = document.getElementById("{}_button")
                   if (x.style.display === "none") {{
                     x.style.display = "block";
+                    for (let a of alldevicebuttons) {{ a.style.border = "2px outset buttonborder"; }}
+                    b.style.border = "4px solid #4CAF50";
                   }} else {{
                     x.style.display = "none";
                   }}

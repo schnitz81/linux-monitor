@@ -46,14 +46,14 @@ def generate_webgui(clients, clients_data_parsed):
                 for i in range(1, 6):
                     if f'vol{i}' in clients_data_parsed[client_host]['disk']:
                         if clients_data_parsed[client_host]['disk'][f'vol{i}']['path'] != 'null':
-                            file.write_content_to_file(html_templates.CLIENT_BUTTON.format(f'{item[0]}_vol{i}', item[0], f'vol {i}'), f'{config.html_path}/{client_host}.html', 'a')
+                            file.write_content_to_file(html_templates.CLIENT_BUTTON.format(f'{item[0]}_vol{i}', f'{item[0]}_vol{i}', item[0], f'vol {i}'), f'{config.html_path}/{client_host}.html', 'a')
             elif item[0] == 'network':
                 for i in range(1, 6):
                     if f'device{i}' in clients_data_parsed[client_host]['network']:
                         if clients_data_parsed[client_host]['network'][f'device{i}']['name'] != 'null':
-                            file.write_content_to_file(html_templates.CLIENT_BUTTON.format(f'{item[0]}_device{i}', item[0], clients_data_parsed[client_host]['network'][f'device{i}']['name']), f'{config.html_path}/{client_host}.html', 'a')
+                            file.write_content_to_file(html_templates.CLIENT_BUTTON.format(f'{item[0]}_device{i}', f'{item[0]}_device{i}', item[0], clients_data_parsed[client_host]['network'][f'device{i}']['name']), f'{config.html_path}/{client_host}.html', 'a')
             else:
-                file.write_content_to_file(html_templates.CLIENT_BUTTON.format(item[0], item[0], item[0]), f'{config.html_path}/{client_host}.html', 'a')
+                file.write_content_to_file(html_templates.CLIENT_BUTTON.format(item[0], item[0], item[0], item[0]), f'{config.html_path}/{client_host}.html', 'a')
 
         # write data records
         for item in clients_data_parsed[client_host].items():
@@ -72,7 +72,7 @@ def generate_webgui(clients, clients_data_parsed):
                     file.write_content_to_file(html_templates.DATA_RECORD.format(client_host, item[0], 'year', client_host, item[0], 'year'), f'{config.html_path}/{client_host}.html', 'a')
 
                 # write data tail
-                file.write_content_to_file(html_templates.DATA_TAIL.format(item[0], item[0]), f'{config.html_path}/{client_host}.html', 'a')
+                file.write_content_to_file(html_templates.DATA_TAIL.format(item[0], item[0], item[0]), f'{config.html_path}/{client_host}.html', 'a')
 
             elif item[0] == 'disk':
                 for i in range(1, 6):
@@ -90,7 +90,7 @@ def generate_webgui(clients, clients_data_parsed):
                                 file.write_content_to_file(html_templates.DATA_RECORD_DISK_NETWORK.format(client_host, item[0], f'vol{i}', 'year', client_host, item[0], f'vol{i}', 'year'), f'{config.html_path}/{client_host}.html', 'a')
 
                             # write data tail
-                            file.write_content_to_file(html_templates.DATA_TAIL.format(f'{item[0]}_vol{i}', f'{item[0]}_vol{i}'), f'{config.html_path}/{client_host}.html', 'a')
+                            file.write_content_to_file(html_templates.DATA_TAIL.format(f'{item[0]}_vol{i}', f'{item[0]}_vol{i}', f'{item[0]}_vol{i}'), f'{config.html_path}/{client_host}.html', 'a')
 
             elif item[0] == 'network':
                 for i in range(1, 6):
@@ -108,7 +108,7 @@ def generate_webgui(clients, clients_data_parsed):
                                 file.write_content_to_file(html_templates.DATA_RECORD_DISK_NETWORK.format(client_host, item[0], f'device{i}', 'year', client_host, item[0], f'device{i}', 'year'), f'{config.html_path}/{client_host}.html', 'a')
 
                             # write data tail
-                            file.write_content_to_file(html_templates.DATA_TAIL.format(f'{item[0]}_device{i}', f'{item[0]}_device{i}'), f'{config.html_path}/{client_host}.html', 'a')
+                            file.write_content_to_file(html_templates.DATA_TAIL.format(f'{item[0]}_device{i}', f'{item[0]}_device{i}', f'{item[0]}_device{i}'), f'{config.html_path}/{client_host}.html', 'a')
 
 
         # write client tail
