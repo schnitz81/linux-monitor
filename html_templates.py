@@ -17,9 +17,11 @@ INDEX_HEAD = """
 	  <table width="500">
 """
 
+
 INDEX_CLIENT = """
 <tr><td><a href="{}.html">{}</a></td><td>{}</td><td><img width="25" height="25" style="position:relative; top:2px;" src="led-{}.svg"></td></tr>
 """
+
 
 INDEX_TAIL = """
 	  </table>
@@ -27,6 +29,7 @@ INDEX_TAIL = """
   </body>
 </html>
 """
+
 
 CLIENT_HEAD = """
 <!DOCTYPE html>
@@ -47,18 +50,22 @@ CLIENT_HEAD = """
 	<center><h2>{}</h2>
 """
 
+
 CLIENT_BUTTON = """
     <button id="{}_button" onclick="hideshow_{}()"><img style="max-width:80px; max-height:80px;" src="{}.png"><h2>{}</h2></button>
 """
+
 
 DATA_HEAD = """
 			<div id="togglediv_{}" style="display:none;">
 			<div class="flex-container">
 """
 
-DATA_RECORD = """                    <div class="thumb"><img width="228" height="175" src="{}-{}-{}.png"  onclick="showImage('{}-{}-{}.png');"></div>"""
+DATA_RECORD = """                    <div class="thumb"><img width="228" height="175" src="{}-{}-{}.png" onclick="showImage('{}-{}-{}.png');"></div>"""
 
-DATA_RECORD_DISK_NETWORK = """                    <div class="thumb"><img width="228" height="175" src="{}-{}-{}-{}.png"  onclick="showImage('{}-{}-{}-{}.png');"></div>"""
+
+DATA_RECORD_DISK_NETWORK = """                    <div class="thumb"><img width="228" height="175" src="{}-{}-{}-{}.png" onclick="showImage('{}-{}-{}-{}.png');"></div>"""
+
 
 DATA_TAIL = """
 				<br></div>
@@ -80,6 +87,7 @@ DATA_TAIL = """
                 }}
 			</script>
 """
+
 
 CLIENT_TAIL = """
       <div class="largeImgPanel"><img style="width:100%; max-width:1300px; max-height:1000px; display:block;" id="largeImg"></div>
