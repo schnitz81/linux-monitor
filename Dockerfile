@@ -24,4 +24,4 @@ ENTRYPOINT ["python","-u","main.py"]
 # docker build . -t linux-monitor
 
 # run:
-# docker run --name linux-monitor --cpus=".1" --restart unless-stopped -d -v /run:/run -v $PWD/backups:/backups -v $PWD/clients.conf:/linux-monitor/clients.conf linux-monitor
+# docker run --name linux-monitor --cpus=".15" --restart unless-stopped -d -v /run:/run -v $PWD/backups:/backups -v $PWD/clients.conf:/linux-monitor/clients.conf linux-monitor
