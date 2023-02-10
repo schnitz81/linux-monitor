@@ -353,7 +353,7 @@ if [ -z "$(which mpstat)" ] ; then
 fi
 
 # check if init parameter is started - run init procedure
-if [ "$1" == "init" ] || [ "$1" == "config" ] || [ "$1" == "setup" ] || [ "$1" == "configure" ] || [ "$1" == "install" ] ||; then
+if [ "$1" == "init" ] || [ "$1" == "config" ] || [ "$1" == "setup" ] || [ "$1" == "configure" ] || [ "$1" == "install" ]; then
 	init
 fi
 
