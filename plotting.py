@@ -1,13 +1,19 @@
 import config
 import database
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-from dateutil import parser
+import matplotlib
+matplotlib.use('Cairo')
+from matplotlib import pyplot as plt
+from matplotlib import dates as mdates
 from matplotlib import style
 from matplotlib import ticker
+from dateutil import parser
 import datetime
 import bitmath
 
+
+# make sure matplotlib interactive mode is off
+if matplotlib.pyplot.isinteractive():
+    matplotlib.pyplot.ioff()
 
 style.use('fivethirtyeight')
 
