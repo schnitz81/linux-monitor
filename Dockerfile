@@ -6,7 +6,9 @@ LABEL description="Monitoring tool for Linux systems that generates graphs and w
 LABEL url="https://github.com/schnitz81/linux-monitor"
 
 RUN apk update --no-cache \
-&& apk add --no-cache bash coreutils curl grep gcc gfortran build-base zlib zlib-dev jpeg libjpeg jpeg-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev tzdata font-opensans \
+&& apk add --no-cache bash coreutils curl grep gcc gfortran build-base zlib zlib-dev jpeg libjpeg jpeg-dev freetype-dev \
+    lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev tzdata font-opensans cairo-dev cairo-gobject \
+    py3-gobject3-dev gobject-introspection-dev \
 && ls /usr/share/zoneinfo && cp /usr/share/zoneinfo/Europe/Stockholm /etc/localtime && echo "Europe/Stockholm" > /etc/timezone \
 && mkdir /backups \
 && mkdir /linux-monitor \
